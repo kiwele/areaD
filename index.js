@@ -5,6 +5,10 @@ import bodyParser from "body-parser";
 import db from "./database.js";
 import userRouter from "./routes/user.js";
 import propertiesRouter from "./routes/properties.js";
+import https from "https";
+
+// Load environment variables from .env file if needed
+env.config();
 
 const app = express();
 
@@ -16,19 +20,20 @@ db.sequelize.sync({ alter: true });
 // log request
 app.use(morgan("tiny"));
 
-
 app.use(express.urlencoded({ extended: false }));
 // pass request to body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-
 app.use("/", userRouter);
-app.use('/property/', propertiesRouter)
+app.use('/property/', propertiesRouter);
 
-app.listen(PORT, () => {
-  console.log(`server listen on port ${PORT}`);
+// Create an HTTPS server with rejectUnauthorized set to false
+const server = https.createServer({ rejectUnauthorized: false }, app);
+
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
 
 export default app;
