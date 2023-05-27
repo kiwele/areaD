@@ -4,7 +4,9 @@ import { verifyaccessToken } from "../middlewares/auth.js";
 import { getUserProfile, updateProfile } from "../controllers/user.js";
 
 const router =  express.Router()
-
+router.get('/', (req, res) => {
+    res.send('tumefika')
+})
 router.post('/register', register)
 router.post('/login', Login)
 router.post('/reset_password', resetPassword)
